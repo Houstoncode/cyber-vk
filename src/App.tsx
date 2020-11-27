@@ -40,7 +40,6 @@ export const App = () => {
   return (
     <View activePanel={activePanel} popout={popout}>
       <Home id="home" fetchedUser={fetchedUser} go={go} />
-      <Main id="main" fetchedUser={fetchedUser} go={go} />
     </View>
   );
 };
