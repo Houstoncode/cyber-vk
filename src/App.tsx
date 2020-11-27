@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { ReactNode, useEffect, useState } from "react";
+import { ScreenSpinner, View } from "@vkontakte/vkui";
+import bridge, {
+  DefaultUpdateConfigData,
+  UserInfo,
+} from "@vkontakte/vk-bridge";
+import { Home } from "./panels/Home";
+import "@vkontakte/vkui/dist/vkui.css";
 
-function App() {
+export const App = () => {
+  const [activePanel, setActivePanel] = useState<string | undefined>("home");
+  const [fetchedUser, setUser] = useState<UserInfo | null>(null);
+  const [popout, setPopout] = useState<ReactNode>(<ScreenSpinner />);
+
+  useEffect(() => {
+    bridge.subscribe(({ detail: { type, data } }) => {
+      if (type === "VKWebAppUpdateConfig") {
+        const typedData = data as DefaultUpdateConfigData;
+
+        const schemeAttribute = document.createAttribute("scheme");
+        schemeAttribute.value = typedData.scheme
+          ? typedData.scheme
+          : "client_light";
+        document.body.attributes.setNamedItem(schemeAttribute);
+      }
+    });
+    async function fetchData() {
+      const user = await bridge.send("VKWebAppGetUserInfo");
+      setUser(user);
+      setPopout(null);
+    }
+    fetchData();
+  }, []);
+
+  const go = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    setActivePanel(event.currentTarget.dataset.to);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <View activePanel={activePanel} popout={popout}>
+      <Home id="home" fetchedUser={fetchedUser} go={go} />
+    </View>
   );
-}
-
-export default App;
+};
