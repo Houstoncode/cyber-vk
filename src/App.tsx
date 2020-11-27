@@ -6,7 +6,6 @@ import bridge, {
 } from "@vkontakte/vk-bridge";
 import { Home } from "./panels/Home";
 import "@vkontakte/vkui/dist/vkui.css";
-import { Main } from "./panels/Main";
 
 export const App = () => {
   const [activePanel, setActivePanel] = useState<string | undefined>("home");
