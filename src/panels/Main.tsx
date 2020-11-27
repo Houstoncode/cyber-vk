@@ -16,7 +16,7 @@ type Props = {
   fetchedUser: UserInfo | null;
 };
 
-export const Home: FC<Props> = ({ id, go, fetchedUser }) => (
+export const Main: FC<Props> = ({ id, go, fetchedUser }) => (
   <Panel id={id}>
     <PanelHeader>Example</PanelHeader>
     {fetchedUser && (
@@ -40,8 +40,8 @@ export const Home: FC<Props> = ({ id, go, fetchedUser }) => (
 
     <Group title="Navigation Example">
       <Div>
-        <Button size="xl" onClick={go} data-to="main">
-          Show me the Persik, please
+        <Button size="xl" onClick={go} data-to="home">
+          Show m
         </Button>
       </Div>
     </Group>

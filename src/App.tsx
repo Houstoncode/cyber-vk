@@ -6,6 +6,7 @@ import bridge, {
 } from "@vkontakte/vk-bridge";
 import { Home } from "./panels/Home";
 import "@vkontakte/vkui/dist/vkui.css";
+import { Main } from "./panels/Main";
 
 export const App = () => {
   const [activePanel, setActivePanel] = useState<string | undefined>("home");
@@ -39,6 +40,7 @@ export const App = () => {
   return (
     <View activePanel={activePanel} popout={popout}>
       <Home id="home" fetchedUser={fetchedUser} go={go} />
+      <Main id="main" fetchedUser={fetchedUser} go={go} />
     </View>
   );
 };
