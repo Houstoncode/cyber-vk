@@ -5,23 +5,29 @@ import {
   Icon28Profile,
   Icon28SearchOutline,
 } from "@vkontakte/icons";
-import bridge, {
-  DefaultUpdateConfigData,
-  UserInfo,
-} from "@vkontakte/vk-bridge";
+import bridge, { DefaultUpdateConfigData } from "@vkontakte/vk-bridge";
 import "@vkontakte/vkui/dist/vkui.css";
 import { Search, Profile, History } from "./panels";
+import { ModalSearchPanel } from "./modals";
 import { useDispatch } from "react-redux";
 import { UserInitAction, UserState, USER_INIT } from "./reducers";
 import { useData } from "./hooks/useData";
+import { FiltersState } from "./reducers/webApp/filtersReducer";
+import { GamesList } from "./panels/GamesList";
 
 export const App = () => {
   const [activeView, setActiveView] = useState<string>("search");
   const [activePanel, setActivePanel] = useState<string>("search");
+  const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [modalHistory, setModalHistory] = useState<string[]>([]);
+  const [game, setGame] = useState<FiltersState["game"]>({
+    name: "Не выбрано",
+    type: "",
+  });
+
   const [popout, setPopout] = useState<ReactNode>(<ScreenSpinner />);
   const dispatch = useDispatch();
   const userData = useData<UserState>("userInit");
-  console.log(userData);
   useEffect(() => {
     bridge.subscribe(({ detail: { type, data } }) => {
       if (type === "VKWebAppUpdateConfig") {
@@ -46,12 +52,42 @@ export const App = () => {
     fetchData();
   }, []);
 
+  const handleActiveModal = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    const currentModal = event.currentTarget.dataset.to || null;
+
+    let history = modalHistory ? [...modalHistory] : [];
+
+    if (currentModal === null) {
+      history = [];
+    } else if (history.indexOf(currentModal) !== -1) {
+      history = history.splice(0, history.indexOf(currentModal) + 1);
+    } else {
+      history.push(currentModal);
+    }
+
+    setActiveModal(currentModal);
+    setModalHistory(history);
+  };
+
   const handleStory = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    console.log(event.currentTarget.dataset.to);
     setActiveView(event.currentTarget.dataset.to || "search");
   };
 
+  const handleModalBack = () => {
+    const modal = modalHistory[modalHistory.length - 2] || null;
+    setActiveModal(modal);
+  };
+
+  const handleSetGame = (game: FiltersState["game"]) => {
+    setActivePanel("search");
+    setGame(game);
+    setActiveModal("search-filter");
+  };
+
   const go = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    setActiveModal(null);
     setActivePanel(event.currentTarget.dataset.to || "search");
   };
 
@@ -87,8 +123,32 @@ export const App = () => {
         </Tabbar>
       }
     >
-      <View id="search" activePanel="search" popout={popout}>
-        <Search id="search" fetchedUser={userData} go={go} />
+      <View
+        id="search"
+        activePanel={activePanel}
+        popout={popout}
+        modal={
+          <ModalSearchPanel
+            game={game}
+            activeModal={activeModal}
+            modalBack={handleModalBack}
+            go={go}
+          />
+        }
+      >
+        <Search
+          id="search"
+          fetchedUser={userData}
+          go={go}
+          setActiveModal={handleActiveModal}
+        />
+        <GamesList
+          id="games"
+          game={game}
+          fetchedUser={userData}
+          setGame={handleSetGame}
+          go={go}
+        />
       </View>
       <View id="history" activePanel="history" popout={popout}>
         <History id="history" fetchedUser={userData} go={go} />
