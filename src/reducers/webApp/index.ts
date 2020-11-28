@@ -1,5 +1,6 @@
 import { Reducer, combineReducers } from "redux";
 import { userInit } from "./userReducer";
+import { filters } from "./filtersReducer";
 
 export * from "./userReducer";
 
@@ -9,6 +10,7 @@ export type Reducers = {
 
 export const webAppReducers = {
   userInit,
+  filters,
 };
 
 export const combinedWebAppReducer = combineReducers(webAppReducers);
