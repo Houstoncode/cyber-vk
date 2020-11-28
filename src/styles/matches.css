@@ -1,17 +1,14 @@
-* {
-  box-sizing: border-box;
-}
-
 .link {
   font-size: 15px;
-  color: #4986CC;
+  color: #4986cc;
+  cursor: pointer;
 }
 
-body {
-  padding: 10px;
+.link-all {
+  cursor: pointer;
 }
 
-.card div{
+.card div {
   width: 150px;
   height: 120px;
   border-radius: 14px;
@@ -34,7 +31,7 @@ body {
   top: 0;
   left: 0;
   background-color: black;
-  opacity: .7;
+  opacity: 0.7;
   z-index: 0;
   border-radius: 14px;
 }

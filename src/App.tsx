@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { UserInitAction, UserState, USER_INIT } from "./reducers";
 import { useData } from "./hooks/useData";
 import { FiltersState } from "./reducers/webApp/filtersReducer";
-import { GamesList } from "./panels/GamesList";
+import "./styles/matches.css";
 
 export const App = () => {
   const [activeView, setActiveView] = useState<string>("search");
@@ -76,12 +76,14 @@ export const App = () => {
   };
 
   const handleModalBack = () => {
-    const modal = modalHistory[modalHistory.length - 2] || null;
+    let modal = modalHistory[modalHistory.length - 2] || null;
+
+    if (modal === activeModal) modal = null;
+
     setActiveModal(modal);
   };
 
   const handleSetGame = (game: FiltersState["game"]) => {
-    setActivePanel("search");
     setGame(game);
     setActiveModal("search-filter");
   };
@@ -133,6 +135,8 @@ export const App = () => {
             activeModal={activeModal}
             modalBack={handleModalBack}
             go={go}
+            setActiveModal={handleActiveModal}
+            setGame={handleSetGame}
           />
         }
       >
@@ -141,13 +145,6 @@ export const App = () => {
           fetchedUser={userData}
           go={go}
           setActiveModal={handleActiveModal}
-        />
-        <GamesList
-          id="games"
-          game={game}
-          fetchedUser={userData}
-          setGame={handleSetGame}
-          go={go}
         />
       </View>
       <View id="history" activePanel="history" popout={popout}>
