@@ -1,4 +1,4 @@
-import { UserState } from "../reducers";
+import { UserState } from "./webApp";
 
 export type DefaultPanelProps = {
   id: string;

@@ -12,7 +12,7 @@ import {
 } from "@vkontakte/vkui";
 import React from "react";
 import { FC } from "react";
-import { DefaultPanelProps } from "../types";
+import { DefaultPanelProps } from "../reducers";
 import "../styles/matches.css";
 
 export const Search: FC<DefaultPanelProps> = ({ id }) => {
