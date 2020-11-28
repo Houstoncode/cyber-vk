@@ -1,18 +1,22 @@
 import { Icon24Cancel, Icon24Done } from "@vkontakte/icons";
 import {
+  Cell,
   FormLayout,
+  Group,
+  List,
   Input,
-  IS_PLATFORM_ANDROID,
-  IS_PLATFORM_IOS,
+  ANDROID,
+  IOS,
   ModalPage,
   ModalPageHeader,
   ModalRoot,
   PanelHeaderButton,
   RangeSlider,
   SelectMimicry,
+  usePlatform,
 } from "@vkontakte/vkui";
 import { Value } from "@vkontakte/vkui/dist/components/RangeSlider/RangeSlider";
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import { FC } from "react";
 import { useDispatch } from "react-redux";
 import { useData } from "../hooks";
@@ -24,16 +28,19 @@ import {
 } from "../reducers/webApp/filtersReducer";
 
 type Props = {
+  modalHistory?: string;
   activeModal: string | null;
   game: FiltersState["game"];
-  modalHistory?: string;
   modalBack: () => void;
-  setActiveModal?: (activeModal: string) => void;
+  setActiveModal: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+  setGame: (game: FiltersState["game"]) => void;
 } & Pick<DefaultPanelProps, "go">;
 
 export const ModalSearchPanel: FC<Props> = ({
   activeModal,
   game,
+  setActiveModal,
+  setGame,
   modalBack,
   go,
 }) => {
@@ -49,6 +56,7 @@ export const ModalSearchPanel: FC<Props> = ({
     filterMaxAge,
   ]);
 
+  const platform = usePlatform();
   const dispatch = useDispatch();
 
   const handleSave = () => {
@@ -74,16 +82,27 @@ export const ModalSearchPanel: FC<Props> = ({
         header={
           <ModalPageHeader
             left={
-              IS_PLATFORM_ANDROID && (
-                <PanelHeaderButton onClick={modalBack}>
-                  <Icon24Cancel />
-                </PanelHeaderButton>
-              )
+              <Fragment>
+                {platform === ANDROID && (
+                  <PanelHeaderButton onClick={modalBack}>
+                    <Icon24Cancel />
+                  </PanelHeaderButton>
+                )}
+              </Fragment>
             }
             right={
-              <PanelHeaderButton onClick={handleSave}>
-                {IS_PLATFORM_IOS ? "Готово" : <Icon24Done />}
-              </PanelHeaderButton>
+              <Fragment>
+                {platform === ANDROID && (
+                  <PanelHeaderButton onClick={handleSave}>
+                    <Icon24Done />
+                  </PanelHeaderButton>
+                )}
+                {platform === IOS && (
+                  <PanelHeaderButton onClick={handleSave}>
+                    Готово
+                  </PanelHeaderButton>
+                )}
+              </Fragment>
             }
           >
             Фильтры
@@ -94,7 +113,7 @@ export const ModalSearchPanel: FC<Props> = ({
           <SelectMimicry
             top="Выберите игру"
             placeholder="Не выбрана"
-            onClick={go}
+            onClick={setActiveModal}
             data-to="games"
           >
             {game.name}
@@ -116,6 +135,91 @@ export const ModalSearchPanel: FC<Props> = ({
             defaultValue={[minAge, maxAge]}
           ></RangeSlider>
         </FormLayout>
+      </ModalPage>
+      <ModalPage
+        id="games"
+        settlingHeight={0}
+        dynamicContentHeight={false}
+        style={{ transform: "translate3d(0px, 0%, 0px)" }}
+        header={
+          <ModalPageHeader
+            left={
+              <Fragment>
+                {platform === ANDROID && (
+                  <PanelHeaderButton onClick={modalBack}>
+                    <Icon24Cancel />
+                  </PanelHeaderButton>
+                )}
+              </Fragment>
+            }
+            right={
+              <Fragment>
+                {platform === ANDROID && (
+                  <PanelHeaderButton onClick={modalBack}>
+                    <Icon24Done />
+                  </PanelHeaderButton>
+                )}
+                {platform === IOS && (
+                  <PanelHeaderButton onClick={modalBack}>
+                    Готово
+                  </PanelHeaderButton>
+                )}
+              </Fragment>
+            }
+          >
+            Выберите игру
+          </ModalPageHeader>
+        }
+      >
+        <Group>
+          <List>
+            <Cell
+              onClick={() =>
+                setGame({
+                  name: "Counter Strike: Global Offensive",
+                  type: "csgo",
+                })
+              }
+              asideContent={
+                game.type === "csgo" ? (
+                  <Icon24Done fill="var(--accent)" />
+                ) : null
+              }
+            >
+              Counter Strike: Global Offensive
+            </Cell>
+            <Cell
+              onClick={() =>
+                setGame({
+                  name: "Counter Strike: Global Offensive",
+                  type: "csgo",
+                })
+              }
+              asideContent={
+                game.type === "csgo" ? (
+                  <Icon24Done fill="var(--accent)" />
+                ) : null
+              }
+            >
+              Counter Strike: Global Offensive
+            </Cell>
+            <Cell
+              onClick={() =>
+                setGame({
+                  name: "Counter Strike: Global Offensive",
+                  type: "csgo",
+                })
+              }
+              asideContent={
+                game.type === "csgo" ? (
+                  <Icon24Done fill="var(--accent)" />
+                ) : null
+              }
+            >
+              Counter Strike: Global Offensive
+            </Cell>
+          </List>
+        </Group>
       </ModalPage>
     </ModalRoot>
   );

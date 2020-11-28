@@ -9,11 +9,12 @@ import {
   Header,
   CardGrid,
   Link,
+  Button,
 } from "@vkontakte/vkui";
 import React from "react";
 import { FC } from "react";
 import { DefaultPanelProps } from "../reducers";
-import "../styles/matches.css";
+// import "../styles/matches.css";
 
 type Props = {
   setActiveModal: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
@@ -22,9 +23,7 @@ type Props = {
 export const Search: FC<Props> = ({ id, setActiveModal }) => {
   return (
     <Panel id={id}>
-      <div>
-        <PanelHeader>Detoxic</PanelHeader>
-      </div>
+      <PanelHeader>Detoxic</PanelHeader>
       <SearchVK
         icon={<Icon24Filter onClick={setActiveModal} data-to="search-filter" />}
       ></SearchVK>
@@ -37,39 +36,17 @@ export const Search: FC<Props> = ({ id, setActiveModal }) => {
               }}
             />
           </Card>
-          <Card size="m" className="card">
-            <div
-              style={{
-                backgroundImage: "url('/images/dota.jpg')",
-              }}
-            />
-          </Card>
-          <Card size="m" className="card">
-            <div
-              style={{
-                backgroundImage: "url('/images/csgo.png')",
-              }}
-            />
-          </Card>
-          <Card size="m" className="card">
-            <div
-              style={{
-                backgroundImage: "url('/images/dota.jpg')",
-              }}
-            />
-          </Card>
-          <Card size="m" className="card">
-            <div
-              style={{
-                backgroundImage: "url('/images/csgo-full.jpg')",
-              }}
-            />
-          </Card>
         </CardScroll>
       </Group>
       <Group
         header={
-          <Header aside={<Link href="#">Показать все</Link>}>
+          <Header
+            aside={
+              <Button mode="tertiary" className="link-all">
+                Показать все
+              </Button>
+            }
+          >
             Рекомендации
           </Header>
         }
@@ -106,13 +83,7 @@ export const Search: FC<Props> = ({ id, setActiveModal }) => {
               </div>
               <div className="matches_card-block">
                 <div className="matches_card-time">27.11.2020</div>
-                <Link
-                  className="link"
-                  href="https://discord.gg/J78CAfmy"
-                  target="_blank"
-                >
-                  Подробнее
-                </Link>
+                <Link className="link">Подробнее</Link>
               </div>
             </div>
           </Card>
@@ -148,13 +119,7 @@ export const Search: FC<Props> = ({ id, setActiveModal }) => {
               </div>
               <div className="matches_card-block">
                 <div className="matches_card-time">27.11.2020</div>
-                <Link
-                  className="link"
-                  href="https://discord.gg/J78CAfmy"
-                  target="_blank"
-                >
-                  Подробнее
-                </Link>
+                <Link className="link">Подробнее</Link>
               </div>
             </div>
           </Card>
@@ -190,13 +155,7 @@ export const Search: FC<Props> = ({ id, setActiveModal }) => {
               </div>
               <div className="matches_card-block">
                 <div className="matches_card-time">27.11.2020</div>
-                <Link
-                  className="link"
-                  href="https://discord.gg/J78CAfmy"
-                  target="_blank"
-                >
-                  Подробнее
-                </Link>
+                <Link className="link">Подробнее</Link>
               </div>
             </div>
           </Card>
@@ -232,13 +191,7 @@ export const Search: FC<Props> = ({ id, setActiveModal }) => {
               </div>
               <div className="matches_card-block">
                 <div className="matches_card-time">27.11.2020</div>
-                <Link
-                  className="link"
-                  href="https://discord.gg/J78CAfmy"
-                  target="_blank"
-                >
-                  Подробнее
-                </Link>
+                <Link className="link">Подробнее</Link>
               </div>
             </div>
           </Card>
