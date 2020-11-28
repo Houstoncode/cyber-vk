@@ -138,9 +138,6 @@ export const ModalSearchPanel: FC<Props> = ({
       </ModalPage>
       <ModalPage
         id="games"
-        settlingHeight={0}
-        dynamicContentHeight={false}
-        style={{ transform: "translate3d(0px, 0%, 0px)" }}
         header={
           <ModalPageHeader
             left={
@@ -171,7 +168,7 @@ export const ModalSearchPanel: FC<Props> = ({
           </ModalPageHeader>
         }
       >
-        <Group>
+        <Group style={{ paddingBottom: "20px" }}>
           <List>
             <Cell
               onClick={() =>

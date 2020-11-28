@@ -50,6 +50,7 @@ export const Search: FC<Props> = ({ id, setActiveModal }) => {
             Рекомендации
           </Header>
         }
+        style={{ paddingBottom: "20px" }}
       >
         <CardGrid>
           <Card size="l">
