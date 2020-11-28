@@ -7,7 +7,7 @@ export function userInit(state: UserState, action: UserInitAction) {
     }
 
     default: {
-      return state;
+      return { ...state };
     }
   }
 }
