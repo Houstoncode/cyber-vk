@@ -1,14 +1,20 @@
 import React, { ReactNode, useEffect, useState } from "react";
-import { ScreenSpinner, View } from "@vkontakte/vkui";
+import { ScreenSpinner, View, Epic, Tabbar, TabbarItem } from "@vkontakte/vkui";
+import {
+  Icon28HistoryBackwardOutline,
+  Icon28Profile,
+  Icon28SearchOutline,
+} from "@vkontakte/icons";
 import bridge, {
   DefaultUpdateConfigData,
   UserInfo,
 } from "@vkontakte/vk-bridge";
-import { Home } from "./panels/Home";
 import "@vkontakte/vkui/dist/vkui.css";
+import { Search, Profile, History } from "./panels";
 
 export const App = () => {
-  const [activePanel, setActivePanel] = useState<string | undefined>("home");
+  const [activeView, setActiveView] = useState<string>("search");
+  const [activePanel, setActivePanel] = useState<string>("search");
   const [fetchedUser, setUser] = useState<UserInfo | null>(null);
   const [popout, setPopout] = useState<ReactNode>(<ScreenSpinner />);
 
@@ -32,13 +38,56 @@ export const App = () => {
     fetchData();
   }, []);
 
+  const handleStory = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    console.log(event.currentTarget.dataset.to);
+    setActiveView(event.currentTarget.dataset.to || "search");
+  };
+
   const go = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    setActivePanel(event.currentTarget.dataset.to);
+    setActivePanel(event.currentTarget.dataset.to || "search");
   };
 
   return (
-    <View activePanel={activePanel} popout={popout}>
-      <Home id="home" fetchedUser={fetchedUser} go={go} />
-    </View>
+    <Epic
+      activeStory={activeView}
+      tabbar={
+        <Tabbar itemsLayout="vertical">
+          <TabbarItem
+            onClick={handleStory}
+            selected={activeView === "search"}
+            data-to="search"
+            text="Поиск"
+          >
+            <Icon28SearchOutline />
+          </TabbarItem>
+          <TabbarItem
+            onClick={handleStory}
+            selected={activeView === "history"}
+            data-to="history"
+            text="История"
+          >
+            <Icon28HistoryBackwardOutline />
+          </TabbarItem>
+          <TabbarItem
+            onClick={handleStory}
+            selected={activeView === "profile"}
+            data-to="profile"
+            text="Профиль"
+          >
+            <Icon28Profile />
+          </TabbarItem>
+        </Tabbar>
+      }
+    >
+      <View id="search" activePanel="search" popout={popout}>
+        <Search id="search" fetchedUser={fetchedUser} go={go} />
+      </View>
+      <View id="history" activePanel="history" popout={popout}>
+        <History id="history" fetchedUser={fetchedUser} go={go} />
+      </View>
+      <View id="profile" activePanel="profile" popout={popout}>
+        <Profile id="profile" fetchedUser={fetchedUser} go={go} />
+      </View>
+    </Epic>
   );
 };

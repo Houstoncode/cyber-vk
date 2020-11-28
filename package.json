@@ -2,6 +2,7 @@
   "name": "vk-app-cyber",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "dependencies": {
     "@babel/core": "7.12.3",
     "@babel/plugin-syntax-jsx": "^7.12.1",
@@ -30,6 +31,9 @@
     "css-loader": "4.3.0",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
+    "eruda": "^2.4.1",
+    "eruda-code": "^2.0.0",
+    "eruda-dom": "^2.0.0",
     "eslint": "^7.11.0",
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-flowtype": "^5.2.0",
@@ -80,7 +84,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "deploy": "yarn build && vk-miniapps-deploy"
   },
   "eslintConfig": {
     "extends": [
@@ -156,5 +161,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "@vkontakte/vk-miniapps-deploy": "0.0.22"
   }
 }
