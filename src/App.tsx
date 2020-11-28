@@ -11,13 +11,17 @@ import bridge, {
 } from "@vkontakte/vk-bridge";
 import "@vkontakte/vkui/dist/vkui.css";
 import { Search, Profile, History } from "./panels";
+import { useDispatch } from "react-redux";
+import { UserInitAction, UserState, USER_INIT } from "./reducers";
+import { useData } from "./hooks/useData";
 
 export const App = () => {
   const [activeView, setActiveView] = useState<string>("search");
   const [activePanel, setActivePanel] = useState<string>("search");
-  const [fetchedUser, setUser] = useState<UserInfo | null>(null);
   const [popout, setPopout] = useState<ReactNode>(<ScreenSpinner />);
-
+  const dispatch = useDispatch();
+  const userData = useData<UserState>("userInit");
+  console.log(userData);
   useEffect(() => {
     bridge.subscribe(({ detail: { type, data } }) => {
       if (type === "VKWebAppUpdateConfig") {
@@ -32,7 +36,11 @@ export const App = () => {
     });
     async function fetchData() {
       const user = await bridge.send("VKWebAppGetUserInfo");
-      setUser(user);
+      const action: UserInitAction = {
+        type: USER_INIT,
+        payload: { ...user, online: true },
+      };
+      dispatch(action);
       setPopout(null);
     }
     fetchData();
@@ -80,13 +88,13 @@ export const App = () => {
       }
     >
       <View id="search" activePanel="search" popout={popout}>
-        <Search id="search" fetchedUser={fetchedUser} go={go} />
+        <Search id="search" fetchedUser={userData} go={go} />
       </View>
       <View id="history" activePanel="history" popout={popout}>
-        <History id="history" fetchedUser={fetchedUser} go={go} />
+        <History id="history" fetchedUser={userData} go={go} />
       </View>
       <View id="profile" activePanel="profile" popout={popout}>
-        <Profile id="profile" fetchedUser={fetchedUser} go={go} />
+        <Profile id="profile" fetchedUser={userData} go={go} />
       </View>
     </Epic>
   );

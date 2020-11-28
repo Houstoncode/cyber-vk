@@ -1,7 +1,7 @@
 import { Panel, PanelHeader } from "@vkontakte/vkui";
 import React from "react";
 import { FC } from "react";
-import { DefaultPanelProps } from "../types";
+import { DefaultPanelProps } from "../reducers";
 
 export const History: FC<DefaultPanelProps> = ({ id }) => {
   return (
