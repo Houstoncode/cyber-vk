@@ -1,5 +1,12 @@
 import React, { ReactNode, useEffect, useState } from "react";
-import { ScreenSpinner, View, Epic, Tabbar, TabbarItem } from "@vkontakte/vkui";
+import {
+  ScreenSpinner,
+  View,
+  Epic,
+  Tabbar,
+  TabbarItem,
+  Caption,
+} from "@vkontakte/vkui";
 import {
   Icon28HistoryBackwardOutline,
   Icon28Profile,
@@ -14,6 +21,7 @@ import { UserInitAction, UserState, USER_INIT } from "./reducers";
 import { useData } from "./hooks/useData";
 import { FiltersState } from "./reducers/webApp/filtersReducer";
 import "./styles/matches.css";
+import { ModalProfile, ModalProfileProps } from "./modals/ModalProfile";
 
 export const App = () => {
   const [activeView, setActiveView] = useState<string>("search");
@@ -24,6 +32,9 @@ export const App = () => {
     name: "Не выбрано",
     type: "",
   });
+  const [profileGame, setProfileGame] = useState<
+    ModalProfileProps["profileGame"]
+  >({ name: "Не выбрано", type: "" });
 
   const [popout, setPopout] = useState<ReactNode>(<ScreenSpinner />);
   const dispatch = useDispatch();
@@ -46,6 +57,7 @@ export const App = () => {
         type: USER_INIT,
         payload: { ...user, online: true },
       };
+
       dispatch(action);
       setPopout(null);
     }
@@ -76,16 +88,29 @@ export const App = () => {
   };
 
   const handleModalBack = () => {
-    let modal = modalHistory[modalHistory.length - 2] || null;
-
+    let modal = null;
     if (modal === activeModal) modal = null;
 
     setActiveModal(modal);
   };
 
-  const handleSetGame = (game: FiltersState["game"]) => {
+  const handleSetGame = (game: FiltersState["game"], setModal = true) => {
     setGame(game);
-    setActiveModal("search-filter");
+
+    if (setModal) {
+      setActiveModal("search-filter");
+    }
+  };
+
+  const handleSetProfileGame = (
+    game: ModalProfileProps["profileGame"],
+    setModal = true
+  ) => {
+    setProfileGame(game);
+
+    if (setModal) {
+      setActiveModal("create-action");
+    }
   };
 
   const go = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -143,6 +168,7 @@ export const App = () => {
         <Search
           id="search"
           fetchedUser={userData}
+          setGame={handleSetGame}
           go={go}
           setActiveModal={handleActiveModal}
         />
@@ -150,8 +176,26 @@ export const App = () => {
       <View id="history" activePanel="history" popout={popout}>
         <History id="history" fetchedUser={userData} go={go} />
       </View>
-      <View id="profile" activePanel="profile" popout={popout}>
-        <Profile id="profile" fetchedUser={userData} go={go} />
+      <View
+        id="profile"
+        activePanel="profile"
+        popout={popout}
+        modal={
+          <ModalProfile
+            activeModal={activeModal}
+            profileGame={profileGame}
+            setProfileGame={handleSetProfileGame}
+            modalBack={handleModalBack}
+            setActiveModal={handleActiveModal}
+          ></ModalProfile>
+        }
+      >
+        <Profile
+          id="profile"
+          fetchedUser={userData}
+          go={go}
+          setActiveModal={handleActiveModal}
+        />
       </View>
     </Epic>
   );

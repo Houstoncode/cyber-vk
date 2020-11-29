@@ -14,6 +14,8 @@ import {
   RangeSlider,
   SelectMimicry,
   usePlatform,
+  Text,
+  Button,
 } from "@vkontakte/vkui";
 import { Value } from "@vkontakte/vkui/dist/components/RangeSlider/RangeSlider";
 import React, { Fragment, useState } from "react";
@@ -26,6 +28,7 @@ import {
   SetFiltersAction,
   SET_FILTERS,
 } from "../reducers/webApp/filtersReducer";
+import "../styles/modals.css";
 
 type Props = {
   modalHistory?: string;
@@ -71,7 +74,6 @@ export const ModalSearchPanel: FC<Props> = ({
     };
 
     dispatch(action);
-
     modalBack();
   };
 
@@ -185,37 +187,91 @@ export const ModalSearchPanel: FC<Props> = ({
             >
               Counter Strike: Global Offensive
             </Cell>
-            <Cell
-              onClick={() =>
-                setGame({
-                  name: "Counter Strike: Global Offensive",
-                  type: "csgo",
-                })
-              }
-              asideContent={
-                game.type === "csgo" ? (
-                  <Icon24Done fill="var(--accent)" />
-                ) : null
-              }
-            >
-              Counter Strike: Global Offensive
-            </Cell>
-            <Cell
-              onClick={() =>
-                setGame({
-                  name: "Counter Strike: Global Offensive",
-                  type: "csgo",
-                })
-              }
-              asideContent={
-                game.type === "csgo" ? (
-                  <Icon24Done fill="var(--accent)" />
-                ) : null
-              }
-            >
-              Counter Strike: Global Offensive
-            </Cell>
           </List>
+        </Group>
+      </ModalPage>
+      <ModalPage
+        id="current-user"
+        className="modal_user"
+        header={
+          <ModalPageHeader
+            left={
+              <Fragment>
+                {platform === ANDROID && (
+                  <PanelHeaderButton onClick={modalBack}>
+                    <Icon24Cancel />
+                  </PanelHeaderButton>
+                )}
+              </Fragment>
+            }
+            right={
+              <Fragment>
+                {platform === ANDROID && (
+                  <PanelHeaderButton onClick={modalBack}>
+                    <Icon24Done />
+                  </PanelHeaderButton>
+                )}
+                {platform === IOS && (
+                  <PanelHeaderButton onClick={modalBack}>
+                    Готово
+                  </PanelHeaderButton>
+                )}
+              </Fragment>
+            }
+          >
+            Nagibator2007
+          </ModalPageHeader>
+        }
+      >
+        <Group separator="hide">
+          <List style={{ textAlign: "center" }}>
+            <Text
+              weight="medium"
+              style={{ fontSize: "16px", marginBottom: "16px" }}
+            >
+              Игра: Counter-Strike: Global Offensive
+            </Text>
+            <Text
+              weight="medium"
+              style={{ fontSize: "16px", marginBottom: "16px" }}
+            >
+              Часы: 8000
+            </Text>
+            <Text
+              weight="medium"
+              style={{ fontSize: "16px", marginBottom: "16px" }}
+            >
+              Звание: Silver II
+            </Text>
+            <Text weight="medium" style={{ fontSize: "16px" }}>
+              О себе: Люблю играть в КС
+            </Text>
+          </List>
+        </Group>
+        <Group
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "22px",
+          }}
+        >
+          <img
+            width="375"
+            height="161"
+            src="https://i.imgur.com/jcPbPun.png"
+            alt=""
+          />
+        </Group>
+        <Group
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            paddingBottom: "30px",
+          }}
+        >
+          <Button mode="secondary" style={{ width: "90%", height: "44px" }}>
+            Пригласить в лобби
+          </Button>
         </Group>
       </ModalPage>
     </ModalRoot>

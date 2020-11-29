@@ -13,14 +13,39 @@ import {
 } from "@vkontakte/vkui";
 import React from "react";
 import { FC } from "react";
+import { useDispatch } from "react-redux";
 import { DefaultPanelProps } from "../reducers";
+import {
+  FiltersState,
+  SetFiltersAction,
+  SET_FILTERS,
+} from "../reducers/webApp/filtersReducer";
 // import "../styles/matches.css";
 
 type Props = {
+  setGame: (game: FiltersState["game"], setGame: boolean) => void;
   setActiveModal: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
 } & DefaultPanelProps;
 
-export const Search: FC<Props> = ({ id, setActiveModal }) => {
+export const Search: FC<Props> = ({ id, setActiveModal, setGame }) => {
+  const dispatch = useDispatch();
+
+  const handleSetFilterGame = () => {
+    const game: FiltersState["game"] = {
+      name: "Counter-Strike: Global Offensive",
+      type: "csgo",
+    };
+
+    const action: SetFiltersAction = {
+      type: SET_FILTERS,
+      payload: {
+        game,
+      },
+    };
+
+    setGame(game, false);
+    dispatch(action);
+  };
   return (
     <Panel id={id}>
       <PanelHeader>Detoxic</PanelHeader>
@@ -29,7 +54,14 @@ export const Search: FC<Props> = ({ id, setActiveModal }) => {
       ></SearchVK>
       <Group separator="show">
         <CardScroll>
-          <Card size="m" className="card">
+          <Card
+            size="m"
+            className="card"
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              handleSetFilterGame();
+            }}
+          >
             <div
               style={{
                 backgroundImage: "url('/images/csgo.png')",
@@ -84,7 +116,13 @@ export const Search: FC<Props> = ({ id, setActiveModal }) => {
               </div>
               <div className="matches_card-block">
                 <div className="matches_card-time">27.11.2020</div>
-                <Link className="link">Подробнее</Link>
+                <Link
+                  className="link"
+                  onClick={setActiveModal}
+                  data-to="current-user"
+                >
+                  Подробнее
+                </Link>
               </div>
             </div>
           </Card>

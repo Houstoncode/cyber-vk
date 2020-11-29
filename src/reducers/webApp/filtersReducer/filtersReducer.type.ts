@@ -9,5 +9,5 @@ export type FiltersState = {
 
 export type SetFiltersAction = {
   type: typeof SET_FILTERS;
-  payload: FiltersState;
+  payload: Partial<FiltersState>;
 };
